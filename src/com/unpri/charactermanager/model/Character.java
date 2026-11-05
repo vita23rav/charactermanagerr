@@ -1,4 +1,5 @@
 package com.unpri.charactermanager.model;
+import java.util.Objects;
 
 public class Character {
 
@@ -133,4 +134,33 @@ public class Character {
                ", mana=" + mana +
                '}';
     }
+    
+    // ===== EQUALS: MEMBANDINGKAN KARAKTER BERDASARKAN NAMA =====
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Character other = (Character) obj;
+
+        if (name == null || other.name == null) {
+            return Objects.equals(name, other.name);
+        }
+
+        return name.trim().equalsIgnoreCase(other.name.trim());
+    }
+
+    // ===== HASHCODE =====
+    @Override
+    public int hashCode() {
+        return name == null
+                ? 0
+                : name.trim().toLowerCase(java.util.Locale.ROOT).hashCode();
+    }
+
 }
