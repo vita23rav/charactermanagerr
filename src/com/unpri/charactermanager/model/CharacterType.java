@@ -1,12 +1,9 @@
-package com.unpri.charactermanager.model;              // baris 1: deklarasi package, HARUS baris pertama (kecuali komentar)
+package com.unpri.charactermanager.model;
 
-/**
- * Enum yang mendefinisikan jenis-jenis karakter dalam aplikasi.
- * Menggunakan enum (bukan String) agar nilai selalu valid & type-safe.
- */
-public enum CharacterType {                             // baris 7: deklarasi enum, nama harus sama dengan nama file
+public enum CharacterType {
     WARRIOR,    // karakter pejuang — HP & attack tinggi
     MAGE,       // karakter penyihir — attack tinggi, HP rendah
     ARCHER,     // karakter pemanah — seimbang, attack jarak jauh
-    HEALER      // karakter penyembuh — HP tinggi, attack rendah
-}                                                        // baris 13: tutup enum, TANPA titik koma setelah kurung kurawal ini
+    HEALER,     // karakter penyembuh — HP tinggi, attack rendah
+    MARLIN 
+}

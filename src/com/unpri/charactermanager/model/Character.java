@@ -1,9 +1,13 @@
 package com.unpri.charactermanager.model;
+
 import java.util.Objects;
 
+/**
+ * Merepresentasikan satu karakter dalam aplikasi Character Manager.
+ * Semua atribut menggunakan private untuk menerapkan encapsulation.
+ */
 public class Character {
 
-    // Atribut private
     private int id;
     private String name;
     private CharacterType type;
@@ -12,8 +16,16 @@ public class Character {
     private int attackPower;
     private int mana;
 
-    // Constructor 1: karakter baru
+    /**
+     * Constructor untuk membuat karakter baru.
+     */
     public Character(String name, CharacterType type, int level) {
+        if (level < 1) {
+            throw new IllegalArgumentException(
+                "Level minimal adalah 1"
+            );
+        }
+
         this.name = name;
         this.type = type;
         this.level = level;
@@ -22,9 +34,17 @@ public class Character {
         this.mana = 0;
     }
 
-    // Constructor 2: karakter dari database
+    /**
+     * Constructor untuk memuat karakter dengan data lengkap.
+     */
     public Character(int id, String name, CharacterType type,
                      int level, int hitPoints, int attackPower) {
+        if (level < 1) {
+            throw new IllegalArgumentException(
+                "Level minimal adalah 1"
+            );
+        }
+
         this.id = id;
         this.name = name;
         this.type = type;
@@ -34,12 +54,10 @@ public class Character {
         this.mana = 0;
     }
 
-    // Menghitung HP
     private int calculateBaseHP() {
         return 100 + (level * 10);
     }
 
-    // Menghitung Attack
     private int calculateBaseAttack() {
         return 10 + (level * 5);
     }
@@ -106,7 +124,6 @@ public class Character {
         this.attackPower = attackPower;
     }
 
-    // Setter Mana
     public void setMana(int mana) {
         if (mana < 0) {
             throw new IllegalArgumentException(
@@ -117,25 +134,16 @@ public class Character {
         this.mana = mana;
     }
 
-    // Method isAlive
+    /**
+     * Memeriksa apakah karakter masih hidup.
+     */
     public boolean isAlive() {
         return hitPoints > 0;
     }
 
-    // toString
-    @Override
-    public String toString() {
-        return "Character{id=" + id +
-               ", name='" + name + '\'' +
-               ", type=" + type +
-               ", level=" + level +
-               ", hp=" + hitPoints +
-               ", atk=" + attackPower +
-               ", mana=" + mana +
-               '}';
-    }
-    
-    // ===== EQUALS: MEMBANDINGKAN KARAKTER BERDASARKAN NAMA =====
+    /**
+     * Membandingkan karakter berdasarkan nama.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -147,20 +155,30 @@ public class Character {
         }
 
         Character other = (Character) obj;
-
-        if (name == null || other.name == null) {
-            return Objects.equals(name, other.name);
-        }
-
-        return name.trim().equalsIgnoreCase(other.name.trim());
+        return Objects.equals(this.name, other.name);
     }
 
-    // ===== HASHCODE =====
+    /**
+     * Menghasilkan hash berdasarkan nama karakter.
+     */
     @Override
     public int hashCode() {
-        return name == null
-                ? 0
-                : name.trim().toLowerCase(java.util.Locale.ROOT).hashCode();
+        return Objects.hash(name);
     }
 
+    /**
+     * Representasi teks karakter.
+     */
+    @Override
+    public String toString() {
+        return "Character{id=" + id
+            + ", name='" + name + '\''
+            + ", type=" + type
+            + ", level=" + level
+            + ", hp=" + hitPoints
+            + ", atk=" + attackPower
+            + ", mana=" + mana
+            + '}';
+    }
 }
+
