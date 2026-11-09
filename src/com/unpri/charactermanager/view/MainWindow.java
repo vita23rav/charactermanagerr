@@ -14,8 +14,7 @@ public class MainWindow extends JFrame {
 
     private final CharacterController controller;
 
-    private final JTextField txtName =
-            new JTextField(12);
+    private final JTextField txtName = new JTextField(12);
 
     private final JComboBox<CharacterType> cmbType =
             new JComboBox<>(CharacterType.values());
@@ -24,48 +23,100 @@ public class MainWindow extends JFrame {
             new JSpinner(
                     new SpinnerNumberModel(1, 1, 100, 1));
 
-    private final JPanel characterPanel =
-            new JPanel();
+    private final JPanel characterPanel = new JPanel();
 
-    private final JLabel lblStatistics =
-            new JLabel();
+    private final JLabel lblStatistics = new JLabel();
+
+    private final JLabel lblTotal = new JLabel();
+    private final JLabel lblAverage = new JLabel();
+    private final JLabel lblStrongest = new JLabel();
+    private final JLabel lblRoles = new JLabel();
 
     private String selectedCharacterName = null;
 
     public MainWindow() {
 
-        CharacterManager manager =
-                new CharacterManager();
+        CharacterManager manager = new CharacterManager();
 
-        controller =
-                new CharacterController(manager);
+        controller = new CharacterController(manager);
 
-        setTitle("Character Manager v0.4");
+        setTitle("Character Manager v0.5");
 
-        setDefaultCloseOperation(
-                JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Panel utama
+        // =========================
+        // PANEL UTAMA
+        // =========================
+
         JPanel mainPanel =
                 new JPanel(new BorderLayout(10, 10));
 
-        mainPanel.setBackground(
-                AppTheme.BACKGROUND);
+        mainPanel.setBackground(AppTheme.BACKGROUND);
 
         mainPanel.setBorder(
                 new EmptyBorder(15, 15, 15, 15));
 
-        // Judul
+        // =========================
+        // HEADER / NORTH
+        // =========================
+
+        JPanel headerPanel =
+                new JPanel(new BorderLayout(5, 10));
+
+        headerPanel.setBackground(AppTheme.BACKGROUND);
+
         JLabel title =
-                new JLabel("CHARACTER MANAGER v0.4");
+                new JLabel("CHARACTER MANAGER v0.5");
 
-        title.setFont(
-                AppTheme.TITLE_FONT);
+        title.setFont(AppTheme.TITLE_FONT);
 
-        title.setForeground(
-                AppTheme.TITLE_COLOR);
+        title.setForeground(AppTheme.TITLE_COLOR);
 
-        // Panel input
+        title.setBorder(
+                new EmptyBorder(0, 0, 5, 0));
+
+        headerPanel.add(
+                title,
+                BorderLayout.NORTH);
+
+        // Panel statistik tambahan GridLayout 2x2
+
+        JPanel statisticsPanel =
+                new JPanel(new GridLayout(2, 2, 8, 8));
+
+        statisticsPanel.setBackground(
+                AppTheme.PANEL_BACKGROUND);
+
+        statisticsPanel.setBorder(
+                AppTheme.PANEL_BORDER);
+
+        lblTotal.setForeground(AppTheme.TEXT_COLOR);
+        lblAverage.setForeground(AppTheme.TEXT_COLOR);
+        lblStrongest.setForeground(AppTheme.TEXT_COLOR);
+        lblRoles.setForeground(AppTheme.TEXT_COLOR);
+
+        lblTotal.setFont(AppTheme.NORMAL_FONT);
+        lblAverage.setFont(AppTheme.NORMAL_FONT);
+        lblStrongest.setFont(AppTheme.NORMAL_FONT);
+        lblRoles.setFont(AppTheme.NORMAL_FONT);
+
+        statisticsPanel.add(lblTotal);
+        statisticsPanel.add(lblAverage);
+        statisticsPanel.add(lblStrongest);
+        statisticsPanel.add(lblRoles);
+
+        headerPanel.add(
+                statisticsPanel,
+                BorderLayout.SOUTH);
+
+        mainPanel.add(
+                headerPanel,
+                BorderLayout.NORTH);
+
+        // =========================
+        // PANEL INPUT KARAKTER
+        // =========================
+
         JPanel inputPanel =
                 new JPanel(new FlowLayout(
                         FlowLayout.LEFT, 5, 5));
@@ -94,12 +145,11 @@ public class MainWindow extends JFrame {
         inputPanel.add(lblLevel);
         inputPanel.add(spnLevel);
 
-        // Tombol
         JButton btnAdd =
                 new JButton("Tambah Karakter");
 
         JButton btnSample =
-                new JButton("Muat 6 Karakter");
+                new JButton("Muat 8 Karakter");
 
         JButton btnRemove =
                 new JButton("Hapus Terpilih");
@@ -108,7 +158,10 @@ public class MainWindow extends JFrame {
         inputPanel.add(btnSample);
         inputPanel.add(btnRemove);
 
-        // Panel kartu
+        // =========================
+        // PANEL DAFTAR KARAKTER
+        // =========================
+
         characterPanel.setLayout(
                 new BoxLayout(
                         characterPanel,
@@ -117,46 +170,23 @@ public class MainWindow extends JFrame {
         characterPanel.setBackground(
                 AppTheme.BACKGROUND);
 
+        // JScrollPane
+
         JScrollPane scrollPane =
                 new JScrollPane(characterPanel);
 
         scrollPane.setBorder(
                 BorderFactory.createEmptyBorder());
 
+        scrollPane.setPreferredSize(
+                new Dimension(550, 350));
+
         scrollPane.getViewport().setBackground(
                 AppTheme.BACKGROUND);
 
-        // Panel bawah
-        JPanel bottomPanel =
-                new JPanel(new BorderLayout());
-
-        bottomPanel.setBackground(
-                AppTheme.PANEL_BACKGROUND);
-
-        bottomPanel.setBorder(
-                AppTheme.PANEL_BORDER);
-
-        lblStatistics.setForeground(
-                AppTheme.TEXT_COLOR);
-
-        lblStatistics.setFont(
-                AppTheme.NORMAL_FONT);
-
-        bottomPanel.add(
-                lblStatistics,
-                BorderLayout.CENTER);
-
-        JButton btnStrongest =
-                new JButton("Karakter Terkuat");
-
-        bottomPanel.add(
-                btnStrongest,
-                BorderLayout.EAST);
-
-        // Susunan utama
-        mainPanel.add(
-                title,
-                BorderLayout.NORTH);
+        // =========================
+        // CENTER PANEL
+        // =========================
 
         JPanel centerPanel =
                 new JPanel(new BorderLayout(5, 5));
@@ -176,13 +206,146 @@ public class MainWindow extends JFrame {
                 centerPanel,
                 BorderLayout.CENTER);
 
+        // =========================
+        // LEGENDA ROLE / EAST
+        // =========================
+
+        JPanel legendPanel =
+                new JPanel();
+
+        legendPanel.setLayout(
+                new BoxLayout(
+                        legendPanel,
+                        BoxLayout.Y_AXIS));
+
+        legendPanel.setBackground(
+                AppTheme.PANEL_BACKGROUND);
+
+        legendPanel.setBorder(
+                BorderFactory.createCompoundBorder(
+                        AppTheme.PANEL_BORDER,
+                        BorderFactory.createEmptyBorder(
+                                5, 5, 5, 5)));
+
+        JLabel lblLegendTitle =
+                new JLabel("LEGENDA ROLE");
+
+        lblLegendTitle.setForeground(
+                AppTheme.TITLE_COLOR);
+
+        lblLegendTitle.setFont(
+                AppTheme.NAME_FONT);
+
+        lblLegendTitle.setAlignmentX(
+                Component.LEFT_ALIGNMENT);
+
+        legendPanel.add(lblLegendTitle);
+
+        legendPanel.add(
+                Box.createVerticalStrut(10));
+
+        // Legenda berasal dari CharacterType.values()
+
+        for (CharacterType type :
+                CharacterType.values()) {
+
+            JPanel rolePanel =
+                    new JPanel(new FlowLayout(
+                            FlowLayout.LEFT, 5, 3));
+
+            rolePanel.setBackground(
+                    AppTheme.PANEL_BACKGROUND);
+
+            rolePanel.setAlignmentX(
+                    Component.LEFT_ALIGNMENT);
+
+            JLabel colorLabel =
+                    new JLabel("     ");
+
+            colorLabel.setOpaque(true);
+
+            colorLabel.setBackground(
+                    AppTheme.colorFor(type));
+
+            colorLabel.setBorder(
+                    BorderFactory.createLineBorder(
+                            AppTheme.BORDER_COLOR));
+
+            JLabel roleLabel =
+                    new JLabel(type.toString());
+
+            roleLabel.setForeground(
+                    AppTheme.TEXT_COLOR);
+
+            roleLabel.setFont(
+                    AppTheme.NORMAL_FONT);
+
+            rolePanel.add(colorLabel);
+            rolePanel.add(roleLabel);
+
+            legendPanel.add(rolePanel);
+
+            legendPanel.add(
+                    Box.createVerticalStrut(5));
+        }
+
         mainPanel.add(
-                bottomPanel,
+                legendPanel,
+                BorderLayout.EAST);
+
+        // =========================
+        // STATUS BAR / SOUTH
+        // =========================
+
+        JPanel statusPanel =
+                new JPanel(new BorderLayout());
+
+        statusPanel.setBackground(
+                AppTheme.PANEL_BACKGROUND);
+
+        statusPanel.setBorder(
+                AppTheme.PANEL_BORDER);
+
+        JLabel lblStatus =
+                new JLabel("Character Manager siap digunakan");
+
+        lblStatus.setForeground(
+                AppTheme.TEXT_COLOR);
+
+        lblStatus.setFont(
+                AppTheme.NORMAL_FONT);
+
+        JLabel lblVersion =
+                new JLabel("v0.5");
+
+        lblVersion.setForeground(
+                AppTheme.TITLE_COLOR);
+
+        lblVersion.setFont(
+                AppTheme.NAME_FONT);
+
+        statusPanel.add(
+                lblStatus,
+                BorderLayout.WEST);
+
+        statusPanel.add(
+                lblVersion,
+                BorderLayout.EAST);
+
+        mainPanel.add(
+                statusPanel,
                 BorderLayout.SOUTH);
+
+        // =========================
+        // SET CONTENT PANE
+        // =========================
 
         setContentPane(mainPanel);
 
-        // Aksi tombol
+        // =========================
+        // AKSI TOMBOL
+        // =========================
+
         btnAdd.addActionListener(
                 e -> addCharacter());
 
@@ -192,10 +355,10 @@ public class MainWindow extends JFrame {
         btnRemove.addActionListener(
                 e -> removeSelected());
 
-        btnStrongest.addActionListener(
-                e -> showStrongest());
+        // =========================
+        // TAMPILAN AWAL
+        // =========================
 
-        // Tampilan awal
         refreshCharacters();
 
         pack();
@@ -206,11 +369,13 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Tambah karakter
+    // =========================
+    // TAMBAH KARAKTER
+    // =========================
+
     private void addCharacter() {
 
-        String name =
-                txtName.getText().trim();
+        String name = txtName.getText().trim();
 
         if (name.isEmpty()) {
 
@@ -243,7 +408,10 @@ public class MainWindow extends JFrame {
         }
     }
 
-    // Muat enam karakter
+    // =========================
+    // MUAT 8 KARAKTER
+    // =========================
+
     private void loadSamples() {
 
         if (controller.getTotalCharacters() > 0) {
@@ -291,10 +459,25 @@ public class MainWindow extends JFrame {
                         CharacterType.MAGE,
                         10));
 
+        controller.addCharacter(
+                new Character(
+                        "Diana",
+                        CharacterType.ARCHER,
+                        7));
+
+        controller.addCharacter(
+                new Character(
+                        "Freya",
+                        CharacterType.HEALER,
+                        8));
+
         refreshCharacters();
     }
 
-    // Hapus karakter terpilih
+    // =========================
+    // HAPUS KARAKTER
+    // =========================
+
     private void removeSelected() {
 
         if (selectedCharacterName == null) {
@@ -315,7 +498,10 @@ public class MainWindow extends JFrame {
         }
     }
 
-    // Membuat kartu karakter
+    // =========================
+    // MEMBUAT KARTU KARAKTER
+    // =========================
+
     private JPanel createCharacterCard(
             Character character) {
 
@@ -331,7 +517,8 @@ public class MainWindow extends JFrame {
         card.setBorder(
                 AppTheme.CARD_BORDER);
 
-        // Nama
+        // Nama karakter
+
         JLabel lblName =
                 new JLabel(
                         character.getName());
@@ -342,7 +529,8 @@ public class MainWindow extends JFrame {
         lblName.setForeground(
                 AppTheme.TEXT_COLOR);
 
-        // Mini-challenge level emas
+        // Level emas
+
         if (character.getLevel()
                 >= AppTheme.GOLD_LEVEL) {
 
@@ -353,24 +541,15 @@ public class MainWindow extends JFrame {
                     AppTheme.GOLD_FONT);
         }
 
-        // Detail
-        String roleLevelColor =
-                character.getLevel()
-                >= AppTheme.GOLD_LEVEL
-                ? "#FFD700"
-                : "#FFFFFF";
+        // Detail karakter
 
         JLabel lblDetails =
                 new JLabel(
                         "<html>"
-                        + "<span style='color:"
-                        + roleLevelColor
-                        + "; font-weight:bold;'>"
                         + "Role: "
                         + character.getType()
                         + " | Level: "
                         + character.getLevel()
-                        + "</span>"
                         + "<br>"
                         + "HP: "
                         + character.getHitPoints()
@@ -385,6 +564,7 @@ public class MainWindow extends JFrame {
                 AppTheme.NORMAL_FONT);
 
         // Tombol hapus
+
         JButton btnDelete =
                 new JButton("Hapus");
 
@@ -425,6 +605,7 @@ public class MainWindow extends JFrame {
                 BorderLayout.EAST);
 
         // Klik kartu untuk memilih
+
         card.addMouseListener(
                 new java.awt.event.MouseAdapter() {
 
@@ -439,6 +620,8 @@ public class MainWindow extends JFrame {
                     }
                 });
 
+        // Border kartu terpilih
+
         if (character.getName().equals(
                 selectedCharacterName)) {
 
@@ -449,7 +632,10 @@ public class MainWindow extends JFrame {
         return card;
     }
 
-    // Refresh kartu
+    // =========================
+    // REFRESH KARTU
+    // =========================
+
     private void refreshCharacters() {
 
         characterPanel.removeAll();
@@ -481,7 +667,10 @@ public class MainWindow extends JFrame {
         characterPanel.repaint();
     }
 
-    // Statistik
+    // =========================
+    // UPDATE STATISTIK
+    // =========================
+
     private void updateStatistics() {
 
         Character strongest =
@@ -508,34 +697,25 @@ public class MainWindow extends JFrame {
                 + "Level tertinggi: "
                 + strongestText
                 + "</html>");
-    }
 
-    // Karakter terkuat
-    private void showStrongest() {
+        // Statistik tambahan GridLayout 2x2
 
-        Character strongest =
-                controller.findStrongest();
+        lblTotal.setText(
+                "Total: "
+                + controller.getTotalCharacters());
 
-        if (strongest == null) {
+        lblAverage.setText(
+                "Rata-rata level: "
+                + String.format(
+                        "%.2f",
+                        controller.getAverageLevel()));
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Belum ada karakter!");
+        lblStrongest.setText(
+                "Terkuat: "
+                + strongestText);
 
-            return;
-        }
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Karakter Terkuat: "
-                + strongest.getName()
-                + "\nRole: "
-                + strongest.getType()
-                + "\nLevel: "
-                + strongest.getLevel()
-                + "\nHP: "
-                + strongest.getHitPoints()
-                + "\nAttack: "
-                + strongest.getAttackPower());
+        lblRoles.setText(
+                "Jumlah role: "
+                + CharacterType.values().length);
     }
 }
