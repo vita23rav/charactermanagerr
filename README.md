@@ -18,9 +18,9 @@ CharacterManager/
 │   └── com/
 │       └── unpri/
 │           └── charactermanager/             
-│               ├── model/
-│               │   ├── Character.java
-│               │   └── CharacterType.java
+│               └── model/
+│                   ├── Character.java
+│                   └── CharacterType.java
 └── README.md
 
 
