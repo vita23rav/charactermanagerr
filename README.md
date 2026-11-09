@@ -12,6 +12,8 @@
 ```text
 
 CharacterManager/
+├──out/
+│   └── Main.class
 ├── Screenshot/
 │   ├── Screenshots output-crud tp05.png
 │   ├── Screenshots output-reference tp05.png
