@@ -1,62 +1,50 @@
 package com.unpri.charactermanager;
 
-import java.util.ArrayList;
-
 import com.unpri.charactermanager.model.Character;
 import com.unpri.charactermanager.model.CharacterType;
+import java.util.ArrayList;
 
 /**
- * Class untuk mengelola daftar karakter.
- * Menggunakan prinsip Encapsulation.
+ * Mengelola kumpulan karakter dan menyediakan fitur analitik.
  */
 public class CharacterManager {
 
-    // ArrayList disimpan secara private
-    private final ArrayList<Character> characterList =
-            new ArrayList<>();
+    private final ArrayList<Character> characters = new ArrayList<>();
 
     /**
-     * Menambahkan karakter ke daftar.
-     * Karakter null, nama kosong, dan nama duplikat ditolak.
+     * Menambahkan karakter jika nama belum digunakan.
      *
      * @param character karakter yang akan ditambahkan
-     * @return true jika berhasil, false jika ditolak
+     * @return true jika berhasil ditambahkan
      */
     public boolean addCharacter(Character character) {
-
-        if (character == null) {
-            return false;
-        }
-
-        if (character.getName() == null
+        if (character == null || character.getName() == null
                 || character.getName().trim().isEmpty()) {
             return false;
         }
 
-        for (Character existing : characterList) {
-            if (existing.equals(character)) {
-                return false;
-            }
+        if (findByName(character.getName()) != null) {
+            return false;
         }
 
-        characterList.add(character);
+        characters.add(character);
         return true;
     }
 
     /**
      * Mencari karakter berdasarkan nama.
      *
-     * @param name nama karakter
-     * @return karakter yang ditemukan atau null
+     * @param name nama yang dicari
+     * @return karakter yang ditemukan, atau null jika tidak ada
      */
     public Character findByName(String name) {
-
         if (name == null) {
             return null;
         }
 
-        for (Character character : characterList) {
-            if (character.getName().equals(name)) {
+        for (Character character : characters) {
+            if (character.getName() != null
+                    && character.getName().equals(name)) {
                 return character;
             }
         }
@@ -67,77 +55,70 @@ public class CharacterManager {
     /**
      * Menghapus karakter berdasarkan nama.
      *
-     * @param name nama karakter
-     * @return true jika berhasil dihapus
+     * @param name nama karakter yang akan dihapus
+     * @return true jika karakter berhasil dihapus
      */
     public boolean removeCharacter(String name) {
-
         Character character = findByName(name);
 
-        if (character != null) {
-            characterList.remove(character);
-            return true;
+        if (character == null) {
+            return false;
         }
 
-        return false;
+        return characters.remove(character);
     }
 
     /**
-     * Mengembalikan jumlah karakter.
+     * Mengembalikan jumlah karakter yang tersimpan.
      *
-     * @return total karakter
+     * @return jumlah karakter
      */
     public int getTotalCharacters() {
-        return characterList.size();
+        return characters.size();
     }
 
     /**
      * Mengembalikan salinan daftar karakter.
-     * Tidak mengekspos ArrayList asli.
      *
-     * @return salinan ArrayList karakter
+     * @return salinan daftar karakter
      */
     public ArrayList<Character> getAllCharacters() {
-        return new ArrayList<>(characterList);
+        return new ArrayList<>(characters);
     }
 
-    // ===== BAGIAN B: MINI CHALLENGE =====
-
     /**
-     * Menghitung rata-rata level semua karakter.
+     * Menghitung rata-rata level seluruh karakter.
      *
-     * @return rata-rata level atau 0 jika daftar kosong
+     * @return rata-rata level, atau 0.0 jika daftar kosong
      */
     public double getAverageLevel() {
-
-        if (characterList.isEmpty()) {
-            return 0;
+        if (characters.isEmpty()) {
+            return 0.0;
         }
 
         int totalLevel = 0;
 
-        for (Character character : characterList) {
+        for (Character character : characters) {
             totalLevel += character.getLevel();
         }
 
-        return (double) totalLevel / characterList.size();
+        return (double) totalLevel / characters.size();
     }
 
     /**
      * Mencari semua karakter berdasarkan tipe.
      *
-     * @param type tipe karakter
-     * @return ArrayList baru berisi karakter dengan tipe tersebut
+     * @param type tipe karakter yang dicari
+     * @return daftar baru berisi karakter dengan tipe tersebut
      */
     public ArrayList<Character> findByType(CharacterType type) {
-
         ArrayList<Character> result = new ArrayList<>();
 
         if (type == null) {
             return result;
         }
 
-        for (Character character : characterList) {
+        for (Character character : characters) {
             if (character.getType() == type) {
                 result.add(character);
             }
@@ -146,24 +127,20 @@ public class CharacterManager {
         return result;
     }
 
-    // ===== BAGIAN C: FITUR ANALITIK =====
-
     /**
-     * Mencari karakter dengan Attack Power tertinggi.
+     * Mencari karakter dengan level tertinggi.
      *
-     * @return karakter terkuat atau null jika daftar kosong
+     * @return karakter dengan level tertinggi, atau null jika kosong
      */
     public Character findStrongest() {
-
-        if (characterList.isEmpty()) {
+        if (characters.isEmpty()) {
             return null;
         }
 
-        Character strongest = characterList.get(0);
+        Character strongest = characters.get(0);
 
-        for (Character character : characterList) {
-            if (character.getAttackPower()
-                    > strongest.getAttackPower()) {
+        for (Character character : characters) {
+            if (character.getLevel() > strongest.getLevel()) {
                 strongest = character;
             }
         }
