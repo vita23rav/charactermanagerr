@@ -1,3 +1,4 @@
+
 package com.unpri.charactermanager.model;
 
 import java.util.Objects;
@@ -20,13 +21,11 @@ public class Character {
      * Constructor untuk membuat karakter baru.
      */
     public Character(String name, CharacterType type, int level) {
-        if (level < 1) {
-            throw new IllegalArgumentException(
-                "Level minimal adalah 1"
-            );
-        }
+        validateName(name);
+        validateType(type);
+        validateLevel(level, type);
 
-        this.name = name;
+        this.name = name.trim();
         this.type = type;
         this.level = level;
         this.hitPoints = calculateBaseHP();
@@ -39,19 +38,57 @@ public class Character {
      */
     public Character(int id, String name, CharacterType type,
                      int level, int hitPoints, int attackPower) {
-        if (level < 1) {
-            throw new IllegalArgumentException(
-                "Level minimal adalah 1"
-            );
-        }
+
+        validateName(name);
+        validateType(type);
+        validateLevel(level, type);
 
         this.id = id;
-        this.name = name;
+        this.name = name.trim();
         this.type = type;
         this.level = level;
         this.hitPoints = hitPoints;
         this.attackPower = attackPower;
         this.mana = 0;
+    }
+
+    /**
+     * Validasi nama karakter.
+     */
+    private void validateName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                "Nama karakter tidak boleh kosong."
+            );
+        }
+    }
+
+    /**
+     * Validasi tipe karakter.
+     */
+    private void validateType(CharacterType type) {
+        if (type == null) {
+            throw new IllegalArgumentException(
+                "Role karakter harus dipilih."
+            );
+        }
+    }
+
+    /**
+     * Validasi level dan aturan khusus MAGE.
+     */
+    private void validateLevel(int level, CharacterType type) {
+        if (level < 1 || level > 99) {
+            throw new IllegalArgumentException(
+                "Level harus berada antara 1 sampai 99."
+            );
+        }
+
+        if (type == CharacterType.MAGE && level > 60) {
+            throw new IllegalArgumentException(
+                "Karakter MAGE tidak boleh memiliki level di atas 60."
+            );
+        }
     }
 
     private int calculateBaseHP() {
@@ -97,19 +134,18 @@ public class Character {
     }
 
     public void setName(String name) {
-        this.name = name;
+        validateName(name);
+        this.name = name.trim();
     }
 
     public void setType(CharacterType type) {
+        validateType(type);
+        validateLevel(this.level, type);
         this.type = type;
     }
 
     public void setLevel(int level) {
-        if (level < 1) {
-            throw new IllegalArgumentException(
-                "Level minimal adalah 1"
-            );
-        }
+        validateLevel(level, this.type);
 
         this.level = level;
         this.hitPoints = calculateBaseHP();
@@ -127,7 +163,7 @@ public class Character {
     public void setMana(int mana) {
         if (mana < 0) {
             throw new IllegalArgumentException(
-                "Mana tidak boleh negatif"
+                "Mana tidak boleh negatif."
             );
         }
 
@@ -181,4 +217,3 @@ public class Character {
             + '}';
     }
 }
-

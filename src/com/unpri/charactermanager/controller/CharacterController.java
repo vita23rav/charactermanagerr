@@ -1,3 +1,4 @@
+
 package com.unpri.charactermanager.controller;
 
 import com.unpri.charactermanager.CharacterManager;
@@ -18,14 +19,35 @@ public class CharacterController {
         return manager.getAllCharacters();
     }
 
+    /**
+     * Memeriksa apakah nama sudah digunakan.
+     */
+    public boolean isNameTaken(String name) {
+        return manager.isNameTaken(name);
+    }
+
+    /**
+     * Menambahkan karakter baru.
+     */
     public boolean addCharacter(
             String name, CharacterType type, int level) {
 
-        if (name == null || name.trim().isEmpty()
-                || type == null || level < 1) {
-            return false;
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Nama karakter tidak boleh kosong.");
         }
 
+        if (type == null) {
+            throw new IllegalArgumentException(
+                    "Role karakter harus dipilih.");
+        }
+
+        if (manager.isNameTaken(name)) {
+            throw new IllegalArgumentException(
+                    "Nama karakter sudah digunakan.");
+        }
+
+        // Validasi Model dilakukan oleh constructor Character.
         Character character =
                 new Character(name.trim(), type, level);
 

@@ -21,10 +21,13 @@ CharacterManager/
 │   ├── Screenshots sebelum tp08.png
 │   ├── Screenshots sebelum tp10.png
 │   ├── Screenshots sesudah tp08.png
-│   └── Screenshots sesudah tp10.png
+│   ├── Screenshots sesudah tp10.png
 │   ├── Screenshots Resize-Awal tp12.png
 │   ├── Screenshots Resize-Diperbesar tp12.png
-│   └── Screenshots Resize-Diperkecil tp12.png
+│   ├── Screenshots Resize-Diperkecil tp12.png
+│   ├── Screenshots error nama kosong tp14.png
+│   ├── Screenshots error nama duplikat tp14.png
+│   └── Screenshots sukses tp14.png
 ├── src/
 │   ├── Main.java
 │   └── com/
@@ -38,7 +41,8 @@ CharacterManager/
 │               │   └── CharacterType.java
 │               └── view/
 │                   ├── AppTheme.java
-│                   └── MainWindow.java
+│                   ├── MainWindow.java
+│                   └── CharacterFromPanel.java
 └── README.md
 
 
@@ -293,3 +297,103 @@ Panel statistik dipilih karena dapat menyajikan empat informasi penting secara t
    [https://docs.google.com/document/d/18mFo_vSmwv3Lg73tkWLc6AzVvI-_XeOR_VmplPwLcBY/edit?usp=sharing]
 
 
+# TP14 - Form Validation dan Mini Challenge
+## Java Character Manager
+
+### 1. Deskripsi
+TP14 merupakan pengembangan aplikasi Java Character Manager dengan menambahkan form input karakter, validasi input, serta aturan tambahan pada proses penambahan karakter.
+
+### 2. Fitur yang Diimplementasikan
+
+- Form input nama karakter.
+- Pemilihan role menggunakan JComboBox.
+- Pemilihan level menggunakan JSpinner dengan rentang 1–99.
+- Validasi nama kosong.
+- Validasi panjang nama 3–20 karakter.
+- Validasi format nama hanya menggunakan huruf dan spasi.
+- Validasi nama duplikat.
+- Pesan kesalahan ditampilkan langsung pada form.
+- Border input berubah menjadi merah ketika terjadi kesalahan.
+- Karakter baru ditambahkan ke daftar setelah input valid.
+
+### 3. Aturan Validasi Tambahan
+
+**Aturan 1: Nama tidak boleh menggunakan spasi ganda**
+
+- Lokasi: View (`CharacterFormPanel.java`).
+- Tujuan: Mencegah nama karakter memiliki dua spasi berturut-turut.
+- Contoh: `Arjuna  Putra` ditolak.
+
+**Aturan 2: Maksimal 20 karakter dalam daftar**
+
+- Lokasi: `CharacterManager.java`.
+- Tujuan: Membatasi jumlah karakter yang dapat ditambahkan ke dalam daftar.
+- Jika jumlah karakter sudah mencapai 20, karakter berikutnya tidak dapat ditambahkan.
+
+### 4. Validasi pada Model
+
+Model `Character` melakukan pemeriksaan terhadap:
+
+- Nama karakter tidak boleh kosong.
+- Role karakter wajib dipilih.
+- Level harus berada pada rentang 1–99.
+- Karakter dengan role MAGE tidak boleh memiliki level lebih dari 60.
+
+Validasi Model tetap dilakukan meskipun input berasal dari luar form aplikasi.
+
+### 5. Tabel Pengujian
+
+| No. | Input | Hasil yang Diharapkan | Hasil Aktual |
+|---|---|---|---|
+| 1 | Nama kosong | Ditolak, muncul pesan error | Sesuai |
+| 2 | Nama Arjuna (duplikat) | Ditolak, muncul pesan error | Sesuai |
+| 3 | Nama Arjuna123 | Ditolak karena format salah | Sesuai |
+| 4 | Nama AB | Ditolak karena kurang dari 3 karakter | Sesuai |
+| 5 | MAGE level 61 | Ditolak oleh Model | Berhasil ditolak |
+| 6 | MAGE level 60 | Diterima | Berhasil ditambahkan |
+| 7 | Nama dengan spasi ganda | Ditolak | Berhasil ditolak |
+| 8 | WARRIOR level 99 | Diterima | Berhasil ditambahkan |
+
+Catatan: Hasil aktual pada tabel harus sesuai dengan pengujian yang benar-benar dilakukan.
+
+### 6. Screenshot Pengujian
+
+Tambahkan screenshot berikut sebagai bukti:
+
+1. Form ketika nama karakter kosong dan pesan error muncul.
+
+   <img width="640" height="359" alt="Screenshots error nama kosong tp14" src="https://github.com/user-attachments/assets/5b1c88f1-8342-45b2-8d54-f64d84e75ece" />
+   
+3. Form ketika nama karakter duplikat dan pesan error muncul.
+   
+   <img width="640" height="359" alt="Screenshots error nama duplikat tp14" src="https://github.com/user-attachments/assets/fef565c7-ec7c-4dc7-bf79-6984a1f2d0da" />
+
+5. Form ketika karakter berhasil ditambahkan dan tampil pada daftar.
+
+   <img width="640" height="358" alt="Screenshots sukses tp14" src="https://github.com/user-attachments/assets/110e18bf-4926-4860-a015-398cd2d77450" />
+
+
+### 7. Link Google Docs Analisis TP14
+
+Dokumen analisis TP14 berisi pembahasan mengenai:
+- Pemilihan komponen input berdasarkan rentang nilai.
+- Perbedaan validasi format dan semantik.
+- Validasi pada View dan Model.
+- Pembuatan pesan error yang baik.
+- Penggunaan casting, ClassCastException, dan ActionListener.
+
+**Link Google Docs:**
+
+[Dokumen Analisis TP14]https://docs.google.com/document/d/1EAESwQ_feZ4qKf4Jozw-2y3FYgF7rrh2qJ7T2JP0WXs/edit?usp=sharing
+
+
+
+
+
+### 8. Kesimpulan
+
+Pada TP14, aplikasi Java Character Manager telah dikembangkan dengan fitur form input dan validasi. Validasi diterapkan pada View dan Model agar data yang dimasukkan sesuai dengan aturan aplikasi.
+
+Dua aturan tambahan yang diterapkan adalah larangan penggunaan spasi ganda pada nama karakter dan pembatasan jumlah karakter maksimal 20 dalam daftar.
+
+Pengujian dilakukan untuk memastikan input yang valid dapat diterima dan input yang tidak sesuai aturan dapat ditolak.

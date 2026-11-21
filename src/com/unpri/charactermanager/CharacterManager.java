@@ -1,3 +1,4 @@
+
 package com.unpri.charactermanager;
 
 import com.unpri.charactermanager.model.Character;
@@ -8,8 +9,32 @@ import java.util.ArrayList;
  * Mengelola kumpulan karakter dan menyediakan fitur analitik.
  */
 public class CharacterManager {
-
+    private static final int MAX_CHARACTERS = 20;
     private final ArrayList<Character> characters = new ArrayList<>();
+
+    /**
+     * Memeriksa apakah nama karakter sudah digunakan.
+     *
+     * @param name nama yang akan diperiksa
+     * @return true jika nama sudah digunakan
+     */
+    public boolean isNameTaken(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+
+        String normalizedName = name.trim();
+
+        for (Character character : characters) {
+            if (character.getName() != null
+                    && character.getName().trim()
+                    .equalsIgnoreCase(normalizedName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Menambahkan karakter jika nama belum digunakan.
@@ -23,10 +48,12 @@ public class CharacterManager {
             return false;
         }
 
-        if (findByName(character.getName()) != null) {
+        if (isNameTaken(character.getName())) {
             return false;
         }
-
+        if (characters.size() >= MAX_CHARACTERS) {
+            return false;
+        }
         characters.add(character);
         return true;
     }
@@ -38,13 +65,16 @@ public class CharacterManager {
      * @return karakter yang ditemukan, atau null jika tidak ada
      */
     public Character findByName(String name) {
-        if (name == null) {
+        if (name == null || name.trim().isEmpty()) {
             return null;
         }
 
+        String normalizedName = name.trim();
+
         for (Character character : characters) {
             if (character.getName() != null
-                    && character.getName().equals(name)) {
+                    && character.getName().trim()
+                    .equalsIgnoreCase(normalizedName)) {
                 return character;
             }
         }
@@ -70,8 +100,6 @@ public class CharacterManager {
 
     /**
      * Mengembalikan jumlah karakter yang tersimpan.
-     *
-     * @return jumlah karakter
      */
     public int getTotalCharacters() {
         return characters.size();
@@ -79,8 +107,6 @@ public class CharacterManager {
 
     /**
      * Mengembalikan salinan daftar karakter.
-     *
-     * @return salinan daftar karakter
      */
     public ArrayList<Character> getAllCharacters() {
         return new ArrayList<>(characters);
@@ -88,8 +114,6 @@ public class CharacterManager {
 
     /**
      * Menghitung rata-rata level seluruh karakter.
-     *
-     * @return rata-rata level, atau 0.0 jika daftar kosong
      */
     public double getAverageLevel() {
         if (characters.isEmpty()) {
@@ -107,9 +131,6 @@ public class CharacterManager {
 
     /**
      * Mencari semua karakter berdasarkan tipe.
-     *
-     * @param type tipe karakter yang dicari
-     * @return daftar baru berisi karakter dengan tipe tersebut
      */
     public ArrayList<Character> findByType(CharacterType type) {
         ArrayList<Character> result = new ArrayList<>();
@@ -129,8 +150,6 @@ public class CharacterManager {
 
     /**
      * Mencari karakter dengan level tertinggi.
-     *
-     * @return karakter dengan level tertinggi, atau null jika kosong
      */
     public Character findStrongest() {
         if (characters.isEmpty()) {
