@@ -6,6 +6,7 @@ import com.unpri.charactermanager.model.CharacterType;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.text.ParseException;
 import java.util.function.Consumer;
@@ -38,15 +39,28 @@ public class CharacterFormPanel extends JPanel {
         this.onSuccess = onSuccess;
 
         setLayout(new GridBagLayout());
-        setBorder(BorderFactory.createTitledBorder("Tambah Karakter"));
+        setBackground(AppTheme.CARD_BACKGROUND);
 
-        nameField = new JTextField(15);
+        TitledBorder titledBorder =
+                BorderFactory.createTitledBorder(
+                        AppTheme.CARD_BORDER,
+                        "Tambah Karakter");
+
+        titledBorder.setTitleColor(AppTheme.TEXT);
+        titledBorder.setTitleFont(AppTheme.EMPHASIS_FONT);
+
+        setBorder(BorderFactory.createCompoundBorder(
+                titledBorder,
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+
+        nameField = new JTextField(12);
         typeCombo = new JComboBox<>(CharacterType.values());
 
         levelSpinner = new JSpinner(
                 new SpinnerNumberModel(1, 1, 99, 1));
 
-        // Menyimpan border asli setiap komponen.
+        // Menyimpan border asli.
         normalNameBorder = nameField.getBorder();
         normalTypeBorder = typeCombo.getBorder();
         normalLevelBorder = levelSpinner.getBorder();
@@ -61,7 +75,14 @@ public class CharacterFormPanel extends JPanel {
     private JLabel createErrorLabel() {
         JLabel label = new JLabel(" ");
         label.setForeground(Color.RED);
-        label.setFont(new Font("Arial", Font.PLAIN, 11));
+        label.setFont(new Font("Arial", Font.PLAIN, 10));
+        return label;
+    }
+
+    private JLabel createFieldLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setForeground(AppTheme.TEXT);
+        label.setFont(AppTheme.BODY_FONT);
         return label;
     }
 
@@ -69,41 +90,56 @@ public class CharacterFormPanel extends JPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        gbc.insets = new Insets(4, 6, 4, 6);
+        gbc.insets = new Insets(4, 5, 2, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        addRow(gbc, 0, "Nama:", nameField, nameError);
-        addRow(gbc, 1, "Role:", typeCombo, typeError);
-        addRow(gbc, 2, "Level:", levelSpinner, levelError);
+        // Baris utama: label dan input.
+        addComponent(createFieldLabel("Nama:"), gbc, 0, 0);
+        addComponent(nameField, gbc, 1, 0);
+
+        addComponent(createFieldLabel("Role:"), gbc, 2, 0);
+        addComponent(typeCombo, gbc, 3, 0);
+
+        addComponent(createFieldLabel("Level:"), gbc, 4, 0);
+        addComponent(levelSpinner, gbc, 5, 0);
 
         JButton addButton = new JButton("Tambah Karakter");
+        addButton.setBackground(AppTheme.BUTTON_BACKGROUND);
+        addButton.setForeground(Color.WHITE);
+        addButton.setFont(AppTheme.EMPHASIS_FONT);
+        addButton.setFocusPainted(false);
 
-        gbc.gridx = 1;
-        gbc.gridy = 6;
+        addComponent(addButton, gbc, 6, 0);
 
-        add(addButton, gbc);
+        // Baris kedua: pesan error tepat di bawah input.
+        addComponent(nameError, gbc, 1, 1);
+        addComponent(typeError, gbc, 3, 1);
+        addComponent(levelError, gbc, 5, 1);
 
         addButton.addActionListener(e -> submitForm());
         nameField.addActionListener(e -> submitForm());
     }
 
-    private void addRow(
+    private void addComponent(
+            Component component,
             GridBagConstraints gbc,
-            int row,
-            String label,
-            JComponent input,
-            JLabel error) {
+            int column,
+            int row) {
 
-        gbc.gridx = 0;
-        gbc.gridy = row * 2;
+        gbc.gridx = column;
+        gbc.gridy = row;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.NONE;
 
-        add(new JLabel(label), gbc);
+        if (component == nameError
+                || component == typeError
+                || component == levelError) {
+            gbc.insets = new Insets(0, 5, 3, 5);
+        } else {
+            gbc.insets = new Insets(4, 5, 2, 5);
+        }
 
-        gbc.gridx = 1;
-        add(input, gbc);
-
-        gbc.gridy = row * 2 + 1;
-        add(error, gbc);
+        add(component, gbc);
     }
 
     /**
@@ -142,9 +178,9 @@ public class CharacterFormPanel extends JPanel {
     }
 
     /**
-     * Validasi nama secara berurutan:
-     * kelengkapan, panjang, format, dan keunikan.
-     * Mengembalikan pesan error atau null jika valid.
+     * Validasi nama:
+     * kelengkapan, panjang, format,
+     * spasi ganda, dan keunikan.
      */
     private String validateName(String name) {
 
@@ -163,12 +199,12 @@ public class CharacterFormPanel extends JPanel {
             return "Nama hanya boleh berisi huruf dan spasi.";
         }
 
-        // Aturan tambahan: tidak boleh ada spasi ganda.
+        // 4. Aturan tambahan: spasi ganda
         if (name.contains("  ")) {
             return "Nama tidak boleh menggunakan spasi ganda.";
         }
 
-        // 4. Keunikan
+        // 5. Keunikan
         if (controller.isNameTaken(name)) {
             return "Nama karakter sudah digunakan.";
         }
@@ -183,7 +219,6 @@ public class CharacterFormPanel extends JPanel {
 
         clearErrors();
 
-        // Membersihkan spasi di awal dan akhir.
         String name = nameField.getText().trim();
 
         // Validasi nama.
@@ -203,7 +238,7 @@ public class CharacterFormPanel extends JPanel {
             return;
         }
 
-        // Membaca nilai spinner setelah commitEdit().
+        // Membaca spinner setelah commitEdit().
         int level;
 
         try {
@@ -215,7 +250,7 @@ public class CharacterFormPanel extends JPanel {
             return;
         }
 
-        // Validasi Model dilakukan melalui Controller dan Character.
+        // Validasi Model melalui Controller dan Character.
         try {
 
             boolean success =
@@ -227,20 +262,33 @@ public class CharacterFormPanel extends JPanel {
                 typeCombo.setSelectedIndex(0);
                 levelSpinner.setValue(1);
 
-                // Memperbarui daftar karakter.
                 onSuccess.accept(null);
 
                 nameField.requestFocusInWindow();
 
             } else {
-                showNameError(
-                        "Karakter gagal ditambahkan. Periksa kembali input.");
+
+                if (controller.getTotalCharacters() >= 20) {
+                    showNameError(
+                            "Jumlah karakter sudah mencapai batas 20.");
+                } else {
+                    showNameError(
+                            "Karakter gagal ditambahkan.");
+                }
             }
 
         } catch (IllegalArgumentException ex) {
 
-            // Pesan exception Model ditampilkan di form.
-            showLevelError(ex.getMessage());
+            // Menampilkan pesan kesalahan Model.
+            if (ex.getMessage() != null
+                    && ex.getMessage().toLowerCase().contains("role")) {
+                showTypeError(ex.getMessage());
+            } else if (ex.getMessage() != null
+                    && ex.getMessage().toLowerCase().contains("nama")) {
+                showNameError(ex.getMessage());
+            } else {
+                showLevelError(ex.getMessage());
+            }
         }
     }
 }
