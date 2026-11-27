@@ -362,15 +362,17 @@ Tambahkan screenshot berikut sebagai bukti:
 
 1. Form ketika nama karakter kosong dan pesan error muncul.
 
-   <img width="640" height="359" alt="Screenshots error nama kosong tp14" src="https://github.com/user-attachments/assets/5b1c88f1-8342-45b2-8d54-f64d84e75ece" />
-   
-3. Form ketika nama karakter duplikat dan pesan error muncul.
-   
-   <img width="640" height="359" alt="Screenshots error nama duplikat tp14" src="https://github.com/user-attachments/assets/fef565c7-ec7c-4dc7-bf79-6984a1f2d0da" />
+   <img width="640" height="359" alt="Screenshots error nama kosong tp14" src="https://github.com/user-attachments/assets/92121ada-3291-4f01-9de9-70c9d3bc0fd4" />
 
-5. Form ketika karakter berhasil ditambahkan dan tampil pada daftar.
+   
+2. Form ketika nama karakter duplikat dan pesan error muncul.
+   
+   <img width="640" height="359" alt="Screenshots error nama duplikat tp14" src="https://github.com/user-attachments/assets/5a184834-d225-4202-93d0-3b077c3b0804" />
 
-   <img width="640" height="358" alt="Screenshots sukses tp14" src="https://github.com/user-attachments/assets/110e18bf-4926-4860-a015-398cd2d77450" />
+
+3. Form ketika karakter berhasil ditambahkan dan tampil pada daftar.
+
+   <img width="639" height="359" alt="Screenshots sukses tp14" src="https://github.com/user-attachments/assets/f7951e39-1ccb-4154-bd25-2d446c286a77" />
 
 
 ### 7. Link Google Docs Analisis TP14
